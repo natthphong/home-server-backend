@@ -15,6 +15,7 @@ import (
 	"github.com/natthphong/home-server-backend/handler/object"
 	"github.com/natthphong/home-server-backend/handler/role"
 	"github.com/natthphong/home-server-backend/handler/roleObject"
+	"github.com/natthphong/home-server-backend/handler/user"
 
 	"log"
 	"strconv"
@@ -98,7 +99,7 @@ func main() {
 	object.Register(iamGroup, dbPool, jwtSecret)
 	role.Register(iamGroup, dbPool, jwtSecret)
 	roleObject.Register(iamGroup, dbPool, jwtSecret)
-
+	user.Register(iamGroup, dbPool, jwtSecret)
 	group.Get("/health", func(c *fiber.Ctx) error {
 		return api.Ok(c, versionDeploy)
 	})
