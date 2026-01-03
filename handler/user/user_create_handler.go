@@ -28,7 +28,8 @@ func CreateUserHandler(dbPool *pgxpool.Pool) fiber.Handler {
 		if err != nil {
 			return api.InternalError(c, "Error hashing password")
 		}
-
+		// TODO
+		status := StatusWaitApprove
 		req.Password = string(hashedPassword)
 		// 1) Insert tbl_user (ตามโครงสร้างใหม่)
 		insertUserQuery := `
@@ -63,7 +64,7 @@ func CreateUserHandler(dbPool *pgxpool.Pool) fiber.Handler {
 			req.OccupationOtherDesc,
 			"Y",
 			req.Password,
-			req.Status,
+			status,
 			req.ExternalID,
 			"N",
 			"system",
@@ -100,6 +101,6 @@ func CreateUserHandler(dbPool *pgxpool.Pool) fiber.Handler {
 		if err := tx.Commit(c.Context()); err != nil {
 			return api.InternalError(c, err.Error())
 		}
-		return api.Ok(c, fiber.Map{"message": "User linked successfully", "status": req.Status})
+		return api.Ok(c, fiber.Map{"message": "User linked successfully", "status": status})
 	}
 }

@@ -83,7 +83,6 @@ type CreateUserRequest struct {
 	SecondEmail         *string      `json:"secondEmail"`
 	OccupationOtherDesc *string      `json:"occupationOtherDesc"`
 	IsActive            *string      `json:"isActive"`
-	Status              string       `json:"status"`
 	AccountName         *string      `json:"accountName"`
 	UserDetails         *interface{} `json:"userDetails,omitempty"`
 	InActive            string       `json:"inActive"`
