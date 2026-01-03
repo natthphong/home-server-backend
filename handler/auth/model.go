@@ -3,9 +3,10 @@ package auth
 import "time"
 
 type LoginRequest struct {
-	AppCode  string `json:"appCode"`  // The application code
-	Username string `json:"username"` // The user's ID (username)
-	Password string `json:"password"` // The user's password
+	AppCode     string `json:"appCode"`     // The application code
+	CompanyCode string `json:"companyCode"` // The application code
+	Username    string `json:"userId"`      // The user's ID (username)
+	Password    string `json:"password"`    // The user's password
 }
 
 type User struct {
@@ -37,7 +38,7 @@ type User struct {
 	UserActiveTime      *time.Time  `json:"userActiveTime"`      // User active time (optional)
 	ExternalID          *string     `json:"externalId"`          // External ID (optional)
 	UserDetails         interface{} `json:"userDetails"`         // Additional user details (optional)
-	InActive            bool        `json:"inActive"`            // Inactive status
+	InActive            string      `json:"inActive"`            // Inactive status
 }
 
 type AccessTokenClaims struct {

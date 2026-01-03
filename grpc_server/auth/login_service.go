@@ -32,6 +32,7 @@ func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*p
 		req.Username,
 		req.Password,
 		req.AppCode,
+		"",
 		s.JWTSecret,
 		s.AccessTokenDuration,
 		s.RefreshTokenDuration,

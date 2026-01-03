@@ -19,7 +19,7 @@ func ApproveUserHandler(db *pgxpool.Pool) fiber.Handler {
 		if req.Status == StatusWaitApprove {
 			return api.BadRequest(c, "status cannot WAIT_APPROVE")
 		}
-		if req.Status != StatusReject && req.Status != StatusSuccess {
+		if req.Status != StatusReject && req.Status != StatusActive {
 			return api.BadRequest(c, "must be status REJECT or SUCCESS ")
 		}
 

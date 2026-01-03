@@ -5,7 +5,7 @@ import "time"
 // Status constants
 const (
 	StatusWaitApprove = "WAIT_APPROVE"
-	StatusSuccess     = "SUCCESS"
+	StatusActive      = "ACTIVE"
 	StatusReject      = "REJECT"
 )
 

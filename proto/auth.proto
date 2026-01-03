@@ -12,6 +12,7 @@ message LoginRequest {
   string appCode = 1;
   string username = 2;
   string password = 3;
+  string companyCode = 4;
 }
 
 message LoginResponse {

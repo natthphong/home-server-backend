@@ -1,11 +1,12 @@
 package auth
 
 import (
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/natthphong/home-server-backend/api"
-	"time"
 )
 
 type RefreshTokenRequest struct {
@@ -43,12 +44,13 @@ func RefreshTokenHandler(
 
 		userID, ok1 := claims["userId"].(string)
 		appCode, ok2 := claims["appCode"].(string)
-		if !ok1 || !ok2 {
+		companyCode, ok3 := claims["companyCode"].(string)
+		if !ok1 || !ok2 || !ok3 {
 			return api.Unauthorized(c)
 		}
 
 		// Call GenerateJWTForUser to generate new tokens
-		response, err := GenerateJWTForUser(db, userID, "", appCode, jwtSecret, accessTokenDuration, refreshTokenDuration, true)
+		response, err := GenerateJWTForUser(db, userID, "", appCode, companyCode, jwtSecret, accessTokenDuration, refreshTokenDuration, true)
 		if err != nil {
 			return err
 		}
