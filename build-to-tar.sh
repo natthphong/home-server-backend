@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-APP_NAME=home-proxy
-IMAGE_TAG=dev
+APP_NAME=home-server
+IMAGE_TAG=2
 OUTPUT_TAR=${APP_NAME}-${IMAGE_TAG}.tar
 IMAGE_NAME=${APP_NAME}:${IMAGE_TAG}
 echo "==> Build Go binary"
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o goapp
 
 echo "==> Build docker image: ${IMAGE_NAME}"
 docker build -t ${IMAGE_NAME} .
