@@ -2,13 +2,14 @@ package auth
 
 import (
 	"context"
+	"time"
+
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pb "gitlab.com/home-server7795544/home-server/iam/iam-backend/grpc/auth"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/handler/auth"
+	pb "github.com/natthphong/home-server-backend/grpc/auth"
+	"github.com/natthphong/home-server-backend/handler/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
 
 type AuthServiceServer struct {
@@ -20,10 +21,10 @@ type AuthServiceServer struct {
 }
 
 func (s *AuthServiceServer) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
-	// Validate input
-	if req.Username == "" || req.AppCode == "" || req.Password == "" {
-		return nil, status.Errorf(codes.InvalidArgument, "BadRequest")
-	}
+	//// Validate input
+	//if req.Username == "" || req.AppCode == "" || req.Password == "" {
+	//	return nil, status.Errorf(codes.InvalidArgument, "BadRequest")
+	//}
 
 	// Generate JWT
 	response, err := auth.GenerateJWTForUser(

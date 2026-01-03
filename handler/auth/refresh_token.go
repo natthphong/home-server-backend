@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/api"
+	"github.com/natthphong/home-server-backend/api"
 	"time"
 )
 

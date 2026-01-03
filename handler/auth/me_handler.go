@@ -1,10 +1,11 @@
 package auth
 
 import (
+	"strings"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/api"
-	"strings"
+	"github.com/natthphong/home-server-backend/api"
 )
 
 func MeHandler(jwtSecret string) fiber.Handler {

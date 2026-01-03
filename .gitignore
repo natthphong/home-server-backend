@@ -29,7 +29,8 @@ bot-line-project
 
 # Go workspace file
 go.work
-
+main
+goapp
 frontend
 
 ### Go Patch ###

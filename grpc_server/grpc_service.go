@@ -2,12 +2,13 @@ package grpc_server
 
 import (
 	"fmt"
-	"github.com/jackc/pgx/v5/pgxpool"
-	gauth "gitlab.com/home-server7795544/home-server/iam/iam-backend/grpc/auth"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/grpc_server/auth"
-	"google.golang.org/grpc"
 	"net"
 	"time"
+
+	"github.com/jackc/pgx/v5/pgxpool"
+	gauth "github.com/natthphong/home-server-backend/grpc/auth"
+	"github.com/natthphong/home-server-backend/grpc_server/auth"
+	"google.golang.org/grpc"
 )
 
 func StartGRPCServer(db *pgxpool.Pool, jwtSecret string, accessTokenDuration, refreshTokenDuration time.Duration) {

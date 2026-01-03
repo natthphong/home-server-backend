@@ -2,25 +2,29 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
+	"runtime"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/google/uuid"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/api"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/config"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/grpc_server"
-	"runtime"
+	"github.com/natthphong/home-server-backend/api"
+	"github.com/natthphong/home-server-backend/config"
+	"github.com/natthphong/home-server-backend/grpc_server"
+	"github.com/natthphong/home-server-backend/handler/object"
+	"github.com/natthphong/home-server-backend/handler/role"
+	"github.com/natthphong/home-server-backend/handler/roleObject"
 
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/handler/auth"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/internal/db"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/internal/httputil"
-	"gitlab.com/home-server7795544/home-server/iam/iam-backend/internal/logz"
-	"go.uber.org/zap"
 	"log"
 	"strconv"
 	"time"
+
+	"github.com/natthphong/home-server-backend/handler/auth"
+	"github.com/natthphong/home-server-backend/internal/db"
+	"github.com/natthphong/home-server-backend/internal/httputil"
+	"github.com/natthphong/home-server-backend/internal/logz"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -43,9 +47,6 @@ func main() {
 	defer cancel()
 	logger := zap.L()
 	logger.Info("version " + strconv.FormatInt(versionDeploy, 10))
-	jsonCfg, err := json.Marshal(cfg.PermissionConfig)
-	_ = jsonCfg
-	logger.Debug("PermissionConfig : " + string(jsonCfg))
 	dbPool, err := db.Open(ctx, cfg.DBConfig)
 	if err != nil {
 		logger.Fatal("server connect to db", zap.Error(err))
@@ -86,12 +87,18 @@ func main() {
 	//}
 	//defer client.Close()
 
-	jwtSecret := "super-secret-key" // Replace with a secure secret
+	jwtSecret := "super-secret-key"
 	accessTokenDuration := 30 * time.Minute
 	refreshTokenDuration := 60 * time.Minute
 	group := app.Group(fmt.Sprintf("/%s/api/v1", cfg.Server.Name))
 
 	auth.Register(group, dbPool, jwtSecret, accessTokenDuration, refreshTokenDuration)
+
+	iamGroup := group.Group("/iam")
+	object.Register(iamGroup, dbPool, jwtSecret)
+	role.Register(iamGroup, dbPool, jwtSecret)
+	roleObject.Register(iamGroup, dbPool, jwtSecret)
+
 	group.Get("/health", func(c *fiber.Ctx) error {
 		return api.Ok(c, versionDeploy)
 	})
