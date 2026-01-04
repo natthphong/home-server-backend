@@ -105,7 +105,7 @@ func main() {
 	group.Get("/metric", metrics())
 	logger.Info(fmt.Sprintf("/%s/api/v1", cfg.Server.Name), zap.Any("port", cfg.Server.Port))
 	//logger.Debug("route", zap.Any("", app.GetRoutes(true)))
-	go grpc_server.StartGRPCServer(dbPool, jwtSecret, accessTokenDuration, refreshTokenDuration)
+	go grpc_server.StartGRPCServer(dbPool, cfg.JwtAuthConfig.JwtSecret, cfg.JwtAuthConfig.AccessTokenDuration, cfg.JwtAuthConfig.RefreshTokenDuration)
 	if err = app.Listen(fmt.Sprintf(":%v", cfg.Server.Port)); err != nil {
 		logger.Fatal(err.Error())
 	}
