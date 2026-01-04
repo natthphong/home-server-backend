@@ -5,7 +5,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func Register(router fiber.Router, dbPool *pgxpool.Pool, jwtSecret string) {
+func Register(router fiber.Router, dbPool *pgxpool.Pool) {
 
 	userGroup := router.Group("/user")
 	userGroup.Post("", CreateUserHandler(dbPool))

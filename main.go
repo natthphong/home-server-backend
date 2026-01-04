@@ -12,6 +12,7 @@ import (
 	"github.com/natthphong/home-server-backend/api"
 	"github.com/natthphong/home-server-backend/config"
 	"github.com/natthphong/home-server-backend/grpc_server"
+	"github.com/natthphong/home-server-backend/handler/middleware"
 	"github.com/natthphong/home-server-backend/handler/object"
 	"github.com/natthphong/home-server-backend/handler/role"
 	"github.com/natthphong/home-server-backend/handler/roleObject"
@@ -88,18 +89,16 @@ func main() {
 	//}
 	//defer client.Close()
 
-	jwtSecret := "super-secret-key"
-	accessTokenDuration := 30 * time.Minute
-	refreshTokenDuration := 60 * time.Minute
+	app.Use(middleware.JWTMiddleware(cfg.JwtAuthConfig.JwtSecret))
 	group := app.Group(fmt.Sprintf("/%s/api/v1", cfg.Server.Name))
 
-	auth.Register(group, dbPool, jwtSecret, accessTokenDuration, refreshTokenDuration)
+	auth.Register(group, dbPool, cfg.JwtAuthConfig.JwtSecret, cfg.JwtAuthConfig.AccessTokenDuration, cfg.JwtAuthConfig.RefreshTokenDuration)
 
 	iamGroup := group.Group("/iam")
-	object.Register(iamGroup, dbPool, jwtSecret)
-	role.Register(iamGroup, dbPool, jwtSecret)
-	roleObject.Register(iamGroup, dbPool, jwtSecret)
-	user.Register(iamGroup, dbPool, jwtSecret)
+	object.Register(iamGroup, dbPool)
+	role.Register(iamGroup, dbPool)
+	roleObject.Register(iamGroup, dbPool)
+	user.Register(iamGroup, dbPool)
 	group.Get("/health", func(c *fiber.Ctx) error {
 		return api.Ok(c, versionDeploy)
 	})

@@ -10,18 +10,20 @@ import (
 )
 
 type Config struct {
-	Env              string
-	EnableS3         bool
-	Server           Server
-	LogConfig        LogConfig
-	DBConfig         DBConfig
-	HTTP             HTTP
-	PermissionConfig map[string][]string
+	Env           string
+	EnableS3      bool
+	Server        Server
+	LogConfig     LogConfig
+	DBConfig      DBConfig
+	HTTP          HTTP
+	JwtAuthConfig JwtAuthConfig
 }
 
-//type PermissionConfig struct {
-//	Permissions map[string][]string
-//}
+type JwtAuthConfig struct {
+	JwtSecret            string
+	AccessTokenDuration  time.Duration
+	RefreshTokenDuration time.Duration
+}
 
 type RedisConfig struct {
 	Mode            string

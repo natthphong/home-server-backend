@@ -5,7 +5,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func Register(app fiber.Router, dbPool *pgxpool.Pool, jwtSecret string) {
+func Register(app fiber.Router, dbPool *pgxpool.Pool) {
 	//objectPermission, ok := permission["object"]
 	//if !ok {
 	//	objectPermission = []string{}

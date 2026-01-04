@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME=home-server
-IMAGE_TAG=3
+IMAGE_TAG=4
 OUTPUT_TAR=${APP_NAME}-${IMAGE_TAG}.tar
 IMAGE_NAME=${APP_NAME}:${IMAGE_TAG}
 echo "==> Build Go binary"

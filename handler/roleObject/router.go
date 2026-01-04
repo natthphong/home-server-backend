@@ -5,7 +5,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func Register(app fiber.Router, dbPool *pgxpool.Pool, jwtSecret string) {
+func Register(app fiber.Router, dbPool *pgxpool.Pool) {
 
 	roleObjectGroup := app.Group("/role-object")
 	roleObjectGroup.Get("", GetRoleObjectsHandler(dbPool))

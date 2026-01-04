@@ -3,19 +3,28 @@ package middleware
 import (
 	"strings"
 
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/natthphong/home-server-backend/api"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 )
 
-// JWTMiddlewareWithObjects validates JWT and checks for required objects
-func JWTMiddlewareWithObjects(jwtSecret string, requireObjects []string) fiber.Handler {
+var ignorePaths = []string{
+	"/auth/",
+	"/health",
+	"/admin/",
+	"/job/",
+}
+
+func JWTMiddleware(jwtSecret string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		if len(requireObjects) == 0 {
-			return c.Next()
-		}
 		tokenString := c.Get("Authorization")
+
+		for _, subPath := range ignorePaths {
+			if strings.Contains(c.Path(), subPath) {
+				return c.Next()
+			}
+		}
 		if len(tokenString) == 0 {
 			return api.JwtError(c, "Token Not Found")
 		}
@@ -38,35 +47,11 @@ func JWTMiddlewareWithObjects(jwtSecret string, requireObjects []string) fiber.H
 		if !ok {
 			return api.JwtError(c, "Failed to parse token claims")
 		}
-		roles, ok := claims["roles"].([]interface{})
+		id, ok := claims["userId"].(string)
 		if !ok {
 			return api.Forbidden(c)
 		}
-
-		for _, role := range roles {
-			roleMap, isMap := role.(map[string]interface{})
-			if !isMap {
-				continue
-			}
-
-			objects, hasObjects := roleMap["objects"].([]interface{})
-			if !hasObjects {
-				continue
-			}
-
-			for _, object := range objects {
-				objectStr, isString := object.(string)
-				if !isString {
-					continue
-				}
-
-				for _, requiredObject := range requireObjects {
-					if objectStr == requiredObject {
-						return c.Next()
-					}
-				}
-			}
-		}
-		return api.Forbidden(c)
+		c.Locals("userId", id)
+		return c.Next()
 	}
 }

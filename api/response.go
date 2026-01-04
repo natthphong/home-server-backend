@@ -42,7 +42,19 @@ func ErrWithBody(code string, message string, body interface{}) Response {
 	}
 }
 func JwtError(c *fiber.Ctx, message string) error {
-	return c.Status(fiber.StatusUnauthorized).JSON(Err("401", message))
+	if message == "Token Not Found" {
+		return c.Status(fiber.StatusUnauthorized).JSON(Err("452", message))
+	} else if message == "Logout Already" {
+		return c.Status(fiber.StatusUnauthorized).JSON(Err("453", message))
+	} else if message == "Token Expired" {
+		return c.Status(fiber.StatusUnauthorized).JSON(Err("454", message))
+	} else if message == "Line VerifyIDToken Failed" {
+		return c.Status(fiber.StatusUnauthorized).JSON(Err("455", message))
+	} else if message == "ERROR DB" {
+		return c.Status(fiber.StatusInternalServerError).JSON(Err("500", message))
+	} else {
+		return c.Status(fiber.StatusUnauthorized).JSON(Err("401", message))
+	}
 
 }
 
