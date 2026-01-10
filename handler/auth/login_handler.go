@@ -122,6 +122,7 @@ func GenerateJWTForUser(
 	// 3. Generate JWT tokens
 	// Access Token
 	accessTokenClaims := jwt.MapClaims{
+		"userIdToken": userIdToken,
 		"userId":      userDto.UserID,
 		"firstNameTh": userDto.FirstNameTh,
 		"lastNameTh":  userDto.LastNameTh,
@@ -140,6 +141,7 @@ func GenerateJWTForUser(
 
 	// Refresh Token
 	refreshTokenClaims := jwt.MapClaims{
+		"userIdToken": userIdToken,
 		"userId":      userDto.UserID,
 		"appCode":     userDto.AppCode,
 		"companyCode": userDto.CompanyCode,
@@ -156,6 +158,7 @@ func GenerateJWTForUser(
 		"accessToken":  accessTokenString,
 		"refreshToken": refreshTokenString,
 		"jwtBody":      accessTokenClaims,
+		"userIdToken":  userIdToken,
 	}
 	return response, nil
 }
